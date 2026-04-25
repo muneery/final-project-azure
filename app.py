@@ -10,10 +10,22 @@ def home():
     if df is None:
         return "Error loading data"
 
+    # --- KPIs ---
+    total_rows = len(df)
+    total_sales = df["spend"].sum()
+    avg_spend = df["spend"].mean()
+    total_units = df["units"].sum()
+
     sample = df.head(20).to_html()
 
-    return render_template("index.html", total=len(df), table=sample)
-
+    return render_template(
+        "index.html",
+        total=total_rows,
+        sales=round(total_sales, 2),
+        avg=round(avg_spend, 2),
+        units=int(total_units),
+        table=sample
+    )
 
 @app.route("/search")
 def search():
