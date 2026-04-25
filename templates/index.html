@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Retail Dashboard</title>
+</head>
+<body>
+
+<h1>Retail Dashboard</h1>
+
+<p><b>Total rows:</b> {{ total }}</p>
+
+<form action="/search">
+    <input name="hshd" placeholder="Enter Household ID">
+    <button type="submit">Search</button>
+</form>
+
+<h2>Sample Data</h2>
+
+{{ table|safe }}
+
+</body>
+</html>
