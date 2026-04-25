@@ -5,8 +5,10 @@ def load_data():
     transactions = pd.read_csv("400_transactions.csv")
     products = pd.read_csv("400_products.csv")
 
-    # merge tables
-    df = transactions.merge(households, on="Hshd_num")
-    df = df.merge(products, on="Product_num")
+    # Merge transactions with products
+    df = transactions.merge(products, on="product_num", how="left")
+
+    # Merge with households
+    df = df.merge(households, on="hshd_num", how="left")
 
     return df
