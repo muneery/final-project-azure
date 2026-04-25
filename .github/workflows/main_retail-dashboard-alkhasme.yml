@@ -14,7 +14,6 @@ jobs:
 deploy:
 runs-on: ubuntu-latest
 
-```
 steps:
   - name: Checkout code
     uses: actions/checkout@v4
@@ -33,4 +32,3 @@ steps:
       app-name: 'retail-dashboard-alkhasme'
       publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_721ED8C4B5004B17AE230E5FFBD7FE2B }}
       package: .
-```
