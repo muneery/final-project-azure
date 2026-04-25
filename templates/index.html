@@ -2,6 +2,10 @@
 <html>
 <head>
     <title>Retail Dashboard</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body { font-family: Arial; margin: 20px; }
 
@@ -20,9 +24,12 @@
             font-size: 18px;
         }
 
-        h1 { margin-bottom: 10px; }
+        canvas {
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
 
 <h1>Retail Dashboard</h1>
@@ -49,8 +56,31 @@
     <button type="submit">Search</button>
 </form>
 
+<!-- CHART -->
+<h2>Sales by Department</h2>
+<canvas id="deptChart" width="600" height="200"></canvas>
+
 <h2>Sample Data</h2>
 {{ table|safe }}
+
+<!-- CHART SCRIPT -->
+<script>
+const ctx = document.getElementById('deptChart');
+
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+            label: 'Sales ($)',
+            data: {{ values|safe }},
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+</script>
 
 </body>
 </html>
