@@ -7,8 +7,8 @@ app = Flask(__name__)
 def home():
     df = load_data()
 
-    if df is None:
-        return "Error loading data"
+    if isinstance(df, str):
+        return df  # show actual error
 
     return f"""
     <h1>Retail Dashboard</h1>
