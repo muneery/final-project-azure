@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def load_data():
     try:
         households = pd.read_csv(
@@ -18,28 +20,16 @@ def load_data():
             skipinitialspace=True
         )
 
-        # CLEAN column names HARD
+        # Clean column names
         households.columns = households.columns.str.strip().str.lower().str.replace(" ", "_")
         transactions.columns = transactions.columns.str.strip().str.lower().str.replace(" ", "_")
         products.columns = products.columns.str.strip().str.lower().str.replace(" ", "_")
 
-        # PRINT TO DEBUG (important)
-        print("Transactions:", transactions.columns.tolist())
-        print("Products:", products.columns.tolist())
-        print("Households:", households.columns.tolist())
-
-        # FIX known bad names manually
-        transactions.rename(columns={
-            'product_num': 'product_num',
-            'hshd_num': 'hshd_num'
-        }, inplace=True)
-
-        # MERGE
+        # Merge data
         df = transactions.merge(products, on="product_num", how="left")
         df = df.merge(households, on="hshd_num", how="left")
 
         return df
 
     except Exception as e:
-        print("ERROR:", str(e))
-        return None
+        return f"ERROR: {str(e)}"
