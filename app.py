@@ -1,33 +1,19 @@
-from flask import Flask, render_template, request
+from flask import Flask
 from data_loader import load_data
 
 app = Flask(__name__)
 
-df = load_data()
-
 @app.route("/")
 def home():
-    return "Retail Dashboard Running"
+    df = load_data()
 
-@app.route("/search", methods=["GET", "POST"])
-def search():
-    results = None
-
-    if request.method == "POST":
-        hshd = request.form.get("hshd")
-        results = df[df["Hshd_num"] == int(hshd)].sort_values(
-            by=["Hshd_num", "Basket_num", "Date", "Product_num"]
-        )
-
-        results = results.head(50).to_html()
+    total_sales = df["SPEND"].sum()
+    total_transactions = len(df)
 
     return f"""
-    <h1>Search Household</h1>
-    <form method="POST">
-        <input name="hshd" placeholder="Enter Hshd_num">
-        <button type="submit">Search</button>
-    </form>
-    <div>{results if results else ""}</div>
+    <h1>Retail Dashboard</h1>
+    <p>Total Sales: ${total_sales:,.2f}</p>
+    <p>Total Transactions: {total_transactions}</p>
     """
 
 if __name__ == "__main__":
