@@ -7,7 +7,7 @@ app = Flask(__name__)
 def home():
     df = load_data()
 
-    total_sales = df["SPEND"].sum()
+    total_sales = df["spend"].sum()
     total_transactions = len(df)
 
     return f"""
