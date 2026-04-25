@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from data_loader import load_data
+import json
 
 app = Flask(__name__)
 
@@ -18,14 +19,23 @@ def home():
 
     sample = df.head(20).to_html()
 
+    # --- CHART DATA ---
+    dept_sales = df.groupby("department")["spend"].sum().sort_values(ascending=False)
+
+    chart_labels = dept_sales.index.tolist()
+    chart_values = dept_sales.values.tolist()
+
     return render_template(
         "index.html",
         total=total_rows,
         sales=round(total_sales, 2),
         avg=round(avg_spend, 2),
         units=int(total_units),
-        table=sample
+        table=sample,
+        labels=json.dumps(chart_labels),
+        values=json.dumps(chart_values)
     )
+
 
 @app.route("/search")
 def search():
