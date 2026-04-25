@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request
 from data_loader import load_data
 
 app = Flask(__name__)
@@ -7,17 +7,28 @@ app = Flask(__name__)
 def home():
     df = load_data()
 
-    if isinstance(df, str):
-        return df
+    if df is None:
+        return "Error loading data"
 
     sample = df.head(20).to_html()
 
-    return f"""
-    <h1>Retail Dashboard</h1>
-    <p>Total rows: {len(df)}</p>
-    <h2>Sample Data</h2>
-    {sample}
-    """
+    return render_template("index.html", total=len(df), table=sample)
+
+
+@app.route("/search")
+def search():
+    hshd = request.args.get("hshd")
+
+    df = load_data()
+
+    if df is None:
+        return "Error loading data"
+
+    if hshd:
+        df = df[df["hshd_num"] == int(hshd)]
+
+    return df.head(50).to_html()
+
 
 if __name__ == "__main__":
     app.run()
