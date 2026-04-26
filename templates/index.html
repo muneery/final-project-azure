@@ -3,103 +3,195 @@
 <head>
     <title>Retail Dashboard</title>
 
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
-        body { font-family: Arial; margin: 20px; }
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f5f7fa;
+        }
 
-        .kpi-container {
-            display: flex;
-            gap: 20px;
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
             margin-bottom: 20px;
         }
 
+        /* KPI CARDS */
+        .kpi-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
         .kpi {
+            flex: 1;
+            background: white;
             padding: 20px;
-            border: 2px solid #4CAF50;
             border-radius: 10px;
-            width: 200px;
             text-align: center;
-            font-size: 18px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .kpi b {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* SEARCH */
+        .search-box {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 8px;
+            width: 200px;
+        }
+
+        button {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        /* CHART GRID */
+        .charts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
         canvas {
-            margin-top: 30px;
+            max-height: 300px;
+        }
+
+        /* TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 12px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+        }
+
+        th {
+            background: #eee;
         }
     </style>
 </head>
 
 <body>
 
+<div class="container">
+
 <h1>Retail Dashboard</h1>
 
 <!-- KPIs -->
 <div class="kpi-container">
-    <div class="kpi"><b>Total Rows</b><br>{{ total }}</div>
-    <div class="kpi"><b>Total Sales</b><br>${{ sales }}</div>
-    <div class="kpi"><b>Avg Spend</b><br>${{ avg }}</div>
-    <div class="kpi"><b>Total Units</b><br>{{ units }}</div>
+    <div class="kpi">
+        <b>Total Rows</b>{{ total }}
+    </div>
+    <div class="kpi">
+        <b>Total Sales</b>${{ sales }}
+    </div>
+    <div class="kpi">
+        <b>Avg Spend</b>${{ avg }}
+    </div>
+    <div class="kpi">
+        <b>Total Units</b>{{ units }}
+    </div>
 </div>
 
-<!-- Search -->
-<form action="/search" method="get">
-    <input name="hshd" placeholder="Enter Household ID" type="number">
-    <button type="submit">Search</button>
-</form>
+<!-- SEARCH -->
+<div class="search-box">
+    <form action="/search" method="get">
+        <input name="hshd" placeholder="Enter Household ID" type="number">
+        <button type="submit">Search</button>
+    </form>
+</div>
 
-<!-- BAR CHART -->
-<h2>Sales by Department</h2>
-<canvas id="deptChart"></canvas>
+<!-- CHARTS -->
+<div class="charts">
 
-<!-- LINE CHART -->
-<h2>Sales Over Time</h2>
-<canvas id="timeChart"></canvas>
+    <div class="chart-card">
+        <h3>Sales by Department</h3>
+        <canvas id="deptChart"></canvas>
+    </div>
 
-<!-- PIE CHART -->
-<h2>Sales by Region</h2>
-<canvas id="regionChart"></canvas>
+    <div class="chart-card">
+        <h3>Sales Over Time</h3>
+        <canvas id="timeChart"></canvas>
+    </div>
 
-<h2>Sample Data</h2>
+    <div class="chart-card">
+        <h3>Sales by Region</h3>
+        <canvas id="regionChart"></canvas>
+    </div>
+
+</div>
+
+<h3>Sample Data</h3>
 {{ table|safe }}
 
+</div>
+
+<!-- CHARTS SCRIPT -->
 <script>
-// BAR CHART
+
+// BAR
 new Chart(document.getElementById('deptChart'), {
     type: 'bar',
     data: {
         labels: {{ labels|safe }},
         datasets: [{
-            label: 'Sales ($)',
-            data: {{ values|safe }},
+            label: 'Sales',
+            data: {{ values|safe }}
         }]
     }
 });
 
-// LINE CHART
+// LINE
 new Chart(document.getElementById('timeChart'), {
     type: 'line',
     data: {
         labels: {{ time_labels|safe }},
         datasets: [{
             label: 'Sales Over Time',
-            data: {{ time_values|safe }},
-            fill: false,
-            tension: 0.1
+            data: {{ time_values|safe }}
         }]
     }
 });
 
-// PIE CHART
+// PIE
 new Chart(document.getElementById('regionChart'), {
     type: 'pie',
     data: {
         labels: {{ region_labels|safe }},
         datasets: [{
-            data: {{ region_values|safe }},
+            data: {{ region_values|safe }}
         }]
     }
 });
+
 </script>
 
 </body>
