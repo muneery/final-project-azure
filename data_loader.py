@@ -25,10 +25,10 @@ def load_data():
         transactions.columns = transactions.columns.str.strip().str.lower().str.replace(" ", "_")
         products.columns = products.columns.str.strip().str.lower().str.replace(" ", "_")
 
-        # 🔥 MAKE DATASET >10K (REQUIREMENT)
+        # MAKE DATASET >10K (REQ)
         transactions = pd.concat([transactions] * 2, ignore_index=True)
 
-        # MERGE ALL TABLES (REQUIREMENT)
+        # MERGE ALL TABLES (REQU)
         df = transactions.merge(products, on="product_num", how="left")
         df = df.merge(households, on="hshd_num", how="left")
 
