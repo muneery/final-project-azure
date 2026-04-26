@@ -39,10 +39,10 @@ def home():
     # ---------------- KPIs ----------------
     total_rows = len(df)
     total_sales = df["spend"].sum()
-    avg_spend = df["spend"].mean()
+    avg_spend = df["spend"].mean() if len(df) > 0 else 0
     total_units = df["units"].sum()
 
-    sample = df.head(20).to_html()
+    sample = df.head(50).to_html()
 
     # ---------------- CHARTS ----------------
     dept_sales = df.groupby("department")["spend"].sum().sort_values(ascending=False)
@@ -146,10 +146,10 @@ def search():
     # KPIs
     total_rows = len(df)
     total_sales = df["spend"].sum()
-    avg_spend = df["spend"].mean()
+    avg_spend = df["spend"].mean() if len(df) > 0 else 0
     total_units = df["units"].sum()
 
-    sample = df.head(20).to_html()
+    sample = df.head(50).to_html()
 
     # charts
     dept_sales = df.groupby("department")["spend"].sum()
