@@ -132,6 +132,9 @@ def logout():
 # -------- SEARCH --------
 @app.route("/search")
 def search():
+    if "user" not in session:
+        return redirect("/")
+
     hshd = request.args.get("hshd")
 
     df = load_data()
@@ -140,8 +143,49 @@ def search():
     if hshd:
         df = df[df["hshd_num"] == int(hshd)]
 
-    return df.head(50).to_html()
+    # KPIs
+    total_rows = len(df)
+    total_sales = df["spend"].sum()
+    avg_spend = df["spend"].mean()
+    total_units = df["units"].sum()
 
+    sample = df.head(20).to_html()
+
+    # charts
+    dept_sales = df.groupby("department")["spend"].sum()
+    chart_labels = dept_sales.index.tolist()
+    chart_values = dept_sales.values.tolist()
+
+    sales_over_time = df.groupby("year")["spend"].sum()
+    time_labels = sales_over_time.index.astype(str).tolist()
+    time_values = sales_over_time.values.tolist()
+
+    region_col = "store_region" if "store_region" in df.columns else "store_r"
+    region_sales = df.groupby(region_col)["spend"].sum()
+    region_labels = region_sales.index.tolist()
+    region_values = region_sales.values.tolist()
+
+    return render_template(
+        "index.html",
+        total=total_rows,
+        sales=round(total_sales, 2),
+        avg=round(avg_spend, 2),
+        units=int(total_units),
+        table=sample,
+
+        labels=json.dumps(chart_labels),
+        values=json.dumps(chart_values),
+        time_labels=json.dumps(time_labels),
+        time_values=json.dumps(time_values),
+        region_labels=json.dumps(region_labels),
+        region_values=json.dumps(region_values),
+
+        top_dept="Filtered",
+        top_region="Filtered",
+        top_pairs=[],
+        ml_prediction="Filtered",
+        churn_count=0
+    )
 
 if __name__ == "__main__":
     app.run()
