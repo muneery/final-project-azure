@@ -5,7 +5,7 @@
 ---
 
 ## 🔗 Live Application  
-https://retail-dashboard-alkhasme.azurewebsites.net  
+retail-dashboard-alkhasme-d9gqf6bze3e2h4ck.northcentralus-01.azurewebsites.net 
 
 ---
 
