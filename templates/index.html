@@ -126,6 +126,23 @@
 <h3 style="margin-top:20px;">Insights</h3>
 <p><b>Top Department:</b> {{ top_dept }}</p>
 <p><b>Top Region:</b> {{ top_region }}</p>
+
+<h3>ML & Advanced Insights</h3>
+
+<p><b>Top Product Pairs (Basket Analysis):</b></p>
+<ul>
+    {% for pair, count in top_pairs %}
+        <li>{{ pair }} → {{ count }} times</li>
+    {% endfor %}
+</ul>
+
+<p><b>ML Prediction (Random Forest):</b>
+Customer with 2 units → High spender? {{ ml_prediction }}
+</p>
+
+<p><b>Churn Risk:</b>
+{{ churn_count }} customers are at risk (low spending)
+</p>
     
 <!-- SEARCH -->
 <div class="search-box">
