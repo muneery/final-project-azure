@@ -11,6 +11,9 @@ def home():
     if df is None:
         return "Error loading data"
 
+    # --- CLEAN COLUMN NAMES (IMPORTANT) ---
+    df.columns = df.columns.str.strip().str.lower()
+
     # --- KPIs ---
     total_rows = len(df)
     total_sales = df["spend"].sum()
@@ -19,23 +22,30 @@ def home():
 
     sample = df.head(20).to_html()
 
-    # --- CHART DATA ---
+    # --- CHART 1: Sales by Department ---
     dept_sales = df.groupby("department")["spend"].sum().sort_values(ascending=False)
-
     chart_labels = dept_sales.index.tolist()
     chart_values = dept_sales.values.tolist()
 
-    # --- LINE CHART: Sales Over Time ---
-    sales_over_time = df.groupby("year")["spend"].sum()
+    # --- CHART 2: Sales Over Time ---
+    if "year" in df.columns:
+        sales_over_time = df.groupby("year")["spend"].sum()
+        time_labels = sales_over_time.index.astype(str).tolist()
+        time_values = sales_over_time.values.tolist()
+    else:
+        time_labels = []
+        time_values = []
 
-    time_labels = sales_over_time.index.astype(str).tolist()
-    time_values = sales_over_time.values.tolist()
+    # --- CHART 3: Sales by Region (FIXED) ---
+    region_col = "store_region" if "store_region" in df.columns else "store_r"
 
-    # --- PIE CHART: Sales by Region ---
-    region_sales = df.groupby("store_region")["spend"].sum()
-
-    region_labels = region_sales.index.tolist()
-    region_values = region_sales.values.tolist()
+    if region_col in df.columns:
+        region_sales = df.groupby(region_col)["spend"].sum()
+        region_labels = region_sales.index.tolist()
+        region_values = region_sales.values.tolist()
+    else:
+        region_labels = []
+        region_values = []
 
     return render_template(
         "index.html",
