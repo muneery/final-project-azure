@@ -127,22 +127,27 @@
 <p><b>Top Department:</b> {{ top_dept }}</p>
 <p><b>Top Region:</b> {{ top_region }}</p>
 
-<h3>ML & Advanced Insights</h3>
+<div class="chart-card">
+    <h3>ML & Advanced Insights</h3>
 
-<p><b>Top Product Pairs (Basket Analysis):</b></p>
-<ul>
-    {% for pair, count in top_pairs %}
-        <li>{{ pair }} → {{ count }} times</li>
-    {% endfor %}
-</ul>
+    <p><b>Top Product Pairs (Basket Analysis):</b></p>
+    <ul>
+        {% for pair, count in top_pairs %}
+            <li>{{ pair }} — {{ count }} times</li>
+        {% endfor %}
+    </ul>
 
-<p><b>ML Prediction (Random Forest):</b>
-Customer with 2 units → High spender? {{ ml_prediction }}
-</p>
+    <p><b>Prediction (Random Forest):</b><br>
+    Customer with 2 units → {{ ml_prediction }}</p>
 
-<p><b>Churn Risk:</b>
-{{ churn_count }} customers are at risk (low spending)
-</p>
+    <p><b>Churn Risk:</b><br>
+    {{ churn_count }} customers at risk</p>
+</div>
+
+<!-- RESET BUTTON -->
+<div style="text-align:center; margin-bottom:10px;">
+    <a href="/dashboard">Reset Dashboard</a>
+</div>
     
 <!-- SEARCH -->
 <div class="search-box">
