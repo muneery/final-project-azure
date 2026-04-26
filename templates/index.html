@@ -25,7 +25,7 @@
         }
 
         canvas {
-            margin-top: 20px;
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -36,18 +36,10 @@
 
 <!-- KPIs -->
 <div class="kpi-container">
-    <div class="kpi">
-        <b>Total Rows</b><br>{{ total }}
-    </div>
-    <div class="kpi">
-        <b>Total Sales</b><br>${{ sales }}
-    </div>
-    <div class="kpi">
-        <b>Avg Spend</b><br>${{ avg }}
-    </div>
-    <div class="kpi">
-        <b>Total Units</b><br>{{ units }}
-    </div>
+    <div class="kpi"><b>Total Rows</b><br>{{ total }}</div>
+    <div class="kpi"><b>Total Sales</b><br>${{ sales }}</div>
+    <div class="kpi"><b>Avg Spend</b><br>${{ avg }}</div>
+    <div class="kpi"><b>Total Units</b><br>{{ units }}</div>
 </div>
 
 <!-- Search -->
@@ -56,18 +48,24 @@
     <button type="submit">Search</button>
 </form>
 
-<!-- CHART -->
+<!-- BAR CHART -->
 <h2>Sales by Department</h2>
-<canvas id="deptChart" width="600" height="200"></canvas>
+<canvas id="deptChart"></canvas>
+
+<!-- LINE CHART -->
+<h2>Sales Over Time</h2>
+<canvas id="timeChart"></canvas>
+
+<!-- PIE CHART -->
+<h2>Sales by Region</h2>
+<canvas id="regionChart"></canvas>
 
 <h2>Sample Data</h2>
 {{ table|safe }}
 
-<!-- CHART SCRIPT -->
 <script>
-const ctx = document.getElementById('deptChart');
-
-new Chart(ctx, {
+// BAR CHART
+new Chart(document.getElementById('deptChart'), {
     type: 'bar',
     data: {
         labels: {{ labels|safe }},
@@ -75,9 +73,31 @@ new Chart(ctx, {
             label: 'Sales ($)',
             data: {{ values|safe }},
         }]
-    },
-    options: {
-        responsive: true
+    }
+});
+
+// LINE CHART
+new Chart(document.getElementById('timeChart'), {
+    type: 'line',
+    data: {
+        labels: {{ time_labels|safe }},
+        datasets: [{
+            label: 'Sales Over Time',
+            data: {{ time_values|safe }},
+            fill: false,
+            tension: 0.1
+        }]
+    }
+});
+
+// PIE CHART
+new Chart(document.getElementById('regionChart'), {
+    type: 'pie',
+    data: {
+        labels: {{ region_labels|safe }},
+        datasets: [{
+            data: {{ region_values|safe }},
+        }]
     }
 });
 </script>
