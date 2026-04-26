@@ -110,6 +110,12 @@ def search():
     except Exception as e:
         return f"SEARCH ERROR: {str(e)}"
 
+# -------- LOGOUT --------
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+
 
 if __name__ == "__main__":
     app.run()
