@@ -143,7 +143,7 @@ def search():
     df = load_data()
     
     if df is None or isinstance(df, str):
-    return f"Error loading data: {df}"
+        return f"Error loading data: {df}"
     
     df.columns = df.columns.str.strip().str.lower()
 
