@@ -25,6 +25,18 @@ def home():
     chart_labels = dept_sales.index.tolist()
     chart_values = dept_sales.values.tolist()
 
+    # --- LINE CHART: Sales Over Time ---
+    sales_over_time = df.groupby("year")["spend"].sum()
+
+    time_labels = sales_over_time.index.astype(str).tolist()
+    time_values = sales_over_time.values.tolist()
+
+    # --- PIE CHART: Sales by Region ---
+    region_sales = df.groupby("store_region")["spend"].sum()
+
+    region_labels = region_sales.index.tolist()
+    region_values = region_sales.values.tolist()
+
     return render_template(
         "index.html",
         total=total_rows,
@@ -33,7 +45,13 @@ def home():
         units=int(total_units),
         table=sample,
         labels=json.dumps(chart_labels),
-        values=json.dumps(chart_values)
+        values=json.dumps(chart_values),
+
+        time_labels=json.dumps(time_labels),
+        time_values=json.dumps(time_values),
+
+        region_labels=json.dumps(region_labels),
+        region_values=json.dumps(region_values)
     )
 
 
